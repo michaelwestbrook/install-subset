@@ -133,6 +133,6 @@ cli.version(installSubsetPackageJson.version).parse(process.argv);
 
 if (cli.args.length === 0) cli.help();
 
-process.on('uncaughtException', err => {
+process.on('error', err => {
   console.log('ERROR: ' + err);
 });
