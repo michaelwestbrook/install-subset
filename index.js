@@ -12,13 +12,21 @@ var packageJson = require(cwd + '/package.json');
 var spawnSync = require('cross-spawn').sync;
 
 var backup = function (filename) {
-  fs.writeFileSync(path.join(cwd, filename + '.backup'), fs.readFileSync(path.join(cwd, filename)));
-  fs.unlinkSync(path.join(cwd, filename));
+  try {
+    fs.writeFileSync(path.join(cwd, filename + '.backup'), fs.readFileSync(path.join(cwd, filename)));
+    fs.unlinkSync(path.join(cwd, filename));
+  } catch (err) {
+    console.warn(err);
+  }
 };
 
 var restore = function (filename) {
-  fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filename + '.backup')));
-  fs.unlinkSync(path.join(cwd, filename + '.backup'));
+  try {
+    fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filename + '.backup')));
+    fs.unlinkSync(path.join(cwd, filename + '.backup'));
+  } catch (err) {
+    console.warn(err);
+  }
 };
 
 var omit = function (obj, props) {
@@ -90,14 +98,18 @@ cli
 
     var installer;
     // choose which installer to use, then spawn
-    if (!options.npm && shelljs.which('yarn')) {
-      installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
-        stdio: 'inherit'
-      });
-    } else {
-      installer = spawnSync('npm', ['install'], {
-        stdio: 'inherit'
-      });
+    try {
+      if (!options.npm && shelljs.which('yarn')) {
+        installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
+          stdio: 'inherit'
+        });
+      } else {
+        installer = spawnSync('npm', ['install'], {
+          stdio: 'inherit'
+        });
+      }
+    } catch (err) {
+      console.warn(err);
     }
 
     // restore package.json and lockfiles from backup
@@ -124,8 +136,3 @@ if (cli.args.length === 0) cli.help();
 process.on('uncaughtException', err => {
   console.log('ERROR: ' + err);
 });
-
-process.on('exit', code => {
-  console.log('exiting');
-  console.log(code);
-})
