@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 'use strict';
 
 var path = require('path');
@@ -10,30 +11,30 @@ var installSubsetPackageJson = require('./package.json');
 var packageJson = require(cwd + '/package.json');
 var spawnSync = require('cross-spawn').sync;
 
-var backup = function(filename) {
-  try {
-    fs.writeFileSync(path.join(cwd, filename, '.backup'), fs.readFileSync(path.join(cwd, filename)));
-    fs.unlinkSync(path.join(cwd, filename));
-  } catch (err) {}
+var backup = function (filename) {
+  fs.writeFileSync(path.join(cwd, filename + '.backup'), fs.readFileSync(path.join(cwd, filename)));
+  fs.unlinkSync(path.join(cwd, filename));
 };
 
-var restore = function(filename) {
-  try {
-    fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filename, '.backup')));
-    fs.unlinkSync(path.join(cwd, filename, '.backup'));
-  } catch (err) {}
+var restore = function (filename) {
+  fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filenams + '.backup')));
+  fs.unlinkSync(path.join(cwd, filename + '.backup'));
 };
 
-var omit = function(obj, props) {
+var omit = function (obj, props) {
   return Object.keys(obj)
     .filter(key => props.indexOf(key) < 0)
-    .reduce((acc, key) => Object.assign(acc, { [key]: obj[key] }), {});
+    .reduce((acc, key) => Object.assign(acc, {
+      [key]: obj[key]
+    }), {});
 };
 
-var pick = function(obj, props) {
+var pick = function (obj, props) {
   return Object.keys(obj)
     .filter(key => props.indexOf(key) >= 0)
-    .reduce((acc, key) => Object.assign(acc, { [key]: obj[key] }), {});
+    .reduce((acc, key) => Object.assign(acc, {
+      [key]: obj[key]
+    }), {});
 };
 
 cli
@@ -42,7 +43,7 @@ cli
   .option('-d, --clean', 'remove node_modules first')
   .option('--npm', 'use npm to install')
   .description('install a given subset defined in package.json')
-  .action(function(input_string, options) {
+  .action(function (input_string, options) {
     if (!input_string) {
       throw 'Please provide an install subset name';
     }
@@ -75,17 +76,20 @@ cli
       shelljs.rm('-rf', path.join(cwd, 'node_modules'));
     }
 
-    try {
-      // write the new temp package.json
-      fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
+    // write the new temp package.json
+    fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
 
-      // choose which installer to use, then spawn
-      if (!options.npm && shelljs.which('yarn')) {
-        var installer = spawnSync('yarn', ['install'], { stdio: 'inherit' });
-      } else {
-        var installer = spawnSync('npm', ['install'], { stdio: 'inherit' });
-      }
-    } catch (err) {} // err doesn't matter, need to perform cleanup operations
+    var installer;
+    // choose which installer to use, then spawn
+    if (!options.npm && shelljs.which('yarn')) {
+      installer = spawnSync('yarn', ['install'], {
+        stdio: 'inherit'
+      });
+    } else {
+      installer = spawnSync('npm', ['install'], {
+        stdio: 'inherit'
+      });
+    }
 
     // restore package.json and lockfiles from backup
     restore('package.json');
