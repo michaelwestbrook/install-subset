@@ -41,6 +41,8 @@ cli
   .command('install [input_string]')
   .alias('i')
   .option('-d, --clean', 'remove node_modules first')
+  .option('--cliOptions', 'Comma separated list of options to provide to install step')
+  .option('--onlyDev', 'Flag indicating to only install dev dependencies')
   .option('--npm', 'use npm to install')
   .description('install a given subset defined in package.json')
   .action(function (input_string, options) {
@@ -67,6 +69,10 @@ cli
       throw 'No valid subset actions found';
     }
 
+    if (options.onlyDev) {
+      packageJson.dependencies = new Object();
+    }
+
     // backup package.json and lockfiles to restore later
     backup('package.json');
     backup('package-lock.json');
@@ -79,14 +85,15 @@ cli
     // write the new temp package.json
     fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
 
+    const cliOptions = options.cliOptions ? options.cliOptions.split(',') : [];
     var installer;
     // choose which installer to use, then spawn
     if (!options.npm && shelljs.which('yarn')) {
-      installer = spawnSync('yarn', ['install'], {
+      installer = spawnSync('yarn', ['install'].concat(cliOptions), {
         stdio: 'inherit'
       });
     } else {
-      installer = spawnSync('npm', ['install'], {
+      installer = spawnSync('npm', ['install'].concat(cliOptions), {
         stdio: 'inherit'
       });
     }
