@@ -2,6 +2,10 @@
   "name": "install-subset",
   "version": "4.1.0",
   "description": "Install a subset of npm dependencies based on given contexts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tabrindle/install-subset"
+  },
   "main": "index.js",
   "bin": {
     "subset": "index.js"
