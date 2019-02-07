@@ -124,3 +124,8 @@ if (cli.args.length === 0) cli.help();
 process.on('uncaughtException', err => {
   console.log('ERROR: ' + err);
 });
+
+process.on('exit', code => {
+  console.log('exiting');
+  console.log(code);
+})
