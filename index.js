@@ -43,6 +43,7 @@ cli
   .option('-d, --clean', 'remove node_modules first')
   .option('--ignoreScripts', 'Ignore Yarn\'s pre and post install scripts')
   .option('--onlyDev', 'Flag indicating to only install dev dependencies')
+  .option('--preserveLockFile', 'Flag indicating to preserve the existing lock file')
   .option('--npm', 'use npm to install')
   .description('install a given subset defined in package.json')
   .action(function (input_string, options) {
@@ -75,8 +76,10 @@ cli
 
     // backup package.json and lockfiles to restore later
     backup('package.json');
-    backup('package-lock.json');
-    // backup('yarn.lock');
+    if (!options.preserveLockFile) {
+      backup('package-lock.json');
+      backup('yarn.lock');
+    }
 
     if (options.clean) {
       shelljs.rm('-rf', path.join(cwd, 'node_modules'));
@@ -99,8 +102,10 @@ cli
 
     // restore package.json and lockfiles from backup
     restore('package.json');
-    restore('package-lock.json');
-    // restore('yarn.lock');
+    if (!options.preserveLockFile) {
+      restore('package-lock.json');
+      restore('yarn.lock');
+    }
 
     if (installer.status !== 0) {
       throw 'Error code ' + installer.status;
