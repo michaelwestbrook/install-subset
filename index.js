@@ -41,7 +41,7 @@ cli
   .command('install [input_string]')
   .alias('i')
   .option('-d, --clean', 'remove node_modules first')
-  .option('--cliOptions', 'Comma separated list of options to provide to install step')
+  .option('--ignoreScripts', 'Ignore Yarn\'s pre and post install scripts')
   .option('--onlyDev', 'Flag indicating to only install dev dependencies')
   .option('--npm', 'use npm to install')
   .description('install a given subset defined in package.json')
@@ -85,15 +85,14 @@ cli
     // write the new temp package.json
     fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
 
-    const cliOptions = options.cliOptions ? options.cliOptions.split(',') : [];
     var installer;
     // choose which installer to use, then spawn
     if (!options.npm && shelljs.which('yarn')) {
-      installer = spawnSync('yarn', ['install'].concat(cliOptions), {
+      installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
         stdio: 'inherit'
       });
     } else {
-      installer = spawnSync('npm', ['install'].concat(cliOptions), {
+      installer = spawnSync('npm', ['install'], {
         stdio: 'inherit'
       });
     }
