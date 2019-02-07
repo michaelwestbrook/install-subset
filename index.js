@@ -17,7 +17,7 @@ var backup = function (filename) {
 };
 
 var restore = function (filename) {
-  fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filenams + '.backup')));
+  fs.writeFileSync(path.join(cwd, filename), fs.readFileSync(path.join(cwd, filename + '.backup')));
   fs.unlinkSync(path.join(cwd, filename + '.backup'));
 };
 
