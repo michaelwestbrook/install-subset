@@ -9,7 +9,7 @@ var cli = require('commander');
 var cwd = process.cwd();
 var installSubsetPackageJson = require('./package.json');
 var packageJson = require(cwd + '/package.json');
-var spawnSync = require('cross-spawn').sync;
+const cp = require('child_process');
 
 var backup = function (filename) {
   try {
@@ -98,19 +98,19 @@ cli
 
     var installer = {status: 0};
     // choose which installer to use, then spawn
-    // try {
-    //   if (!options.npm && shelljs.which('yarn')) {
-    //     installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
-    //       stdio: 'inherit'
-    //     });
-    //   } else {
-    //     installer = spawnSync('npm', ['install'], {
-    //       stdio: 'inherit'
-    //     });
-    //   }
-    // } catch (err) {
-    //   console.warn(err);
-    // }
+    try {
+      if (!options.npm && shelljs.which('yarn')) {
+        installer = cp.execSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
+          stdio: 'inherit'
+        });
+      } else {
+        installer = spawnSync('npm', ['install'], {
+          stdio: 'inherit'
+        });
+      }
+    } catch (err) {
+      console.warn(err);
+    }
 
     // restore package.json and lockfiles from backup
     restore('package.json');

@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "commander": "2.19.0",
-    "cross-spawn": "^6.0.5",
     "shelljs": "^0.7.8"
   }
 }
