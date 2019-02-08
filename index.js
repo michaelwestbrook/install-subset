@@ -100,7 +100,7 @@ cli
     // choose which installer to use, then spawn
     try {
       if (!options.npm && shelljs.which('yarn')) {
-        installer = cp.spawn('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''));
+        installer = cp.spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''));
       } else {
         // installer = spawnSync('npm', ['install'], {
         //   stdio: 'inherit'
