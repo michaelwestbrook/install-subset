@@ -96,21 +96,21 @@ cli
     // write the new temp package.json
     fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
 
-    var installer;
+    var installer = {status: 0};
     // choose which installer to use, then spawn
-    try {
-      if (!options.npm && shelljs.which('yarn')) {
-        installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
-          stdio: 'inherit'
-        });
-      } else {
-        installer = spawnSync('npm', ['install'], {
-          stdio: 'inherit'
-        });
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+    // try {
+    //   if (!options.npm && shelljs.which('yarn')) {
+    //     installer = spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''), {
+    //       stdio: 'inherit'
+    //     });
+    //   } else {
+    //     installer = spawnSync('npm', ['install'], {
+    //       stdio: 'inherit'
+    //     });
+    //   }
+    // } catch (err) {
+    //   console.warn(err);
+    // }
 
     // restore package.json and lockfiles from backup
     restore('package.json');
