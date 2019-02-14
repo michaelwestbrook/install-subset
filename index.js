@@ -84,8 +84,8 @@ cli
 
     // backup package.json and lockfiles to restore later
     backup('package.json');
-      backup('package-lock.json');
     if (!options.preserveLockFile) {
+      backup('package-lock.json');
       backup('yarn.lock');
     }
 
@@ -112,14 +112,12 @@ cli
 
     // restore package.json and lockfiles from backup
     restore('package.json');
-      restore('package-lock.json');
     if (!options.preserveLockFile) {
+      restore('package-lock.json');
       restore('yarn.lock');
     }
     const { StringDecoder } = require('string_decoder');
     const decoder = new StringDecoder('utf8');
-    // decoder.write(Buffer.from)
-
 
     console.log(decoder.write(installer.stdout));
     console.log('*****')
@@ -140,3 +138,14 @@ if (cli.args.length === 0) cli.help();
 process.on('error', err => {
   console.log('ERROR: ' + err);
 });
+
+process.on("message", message => {
+  console.log("message");
+  console.log(message);
+});
+
+process.on("uncaughtException", e => {
+  console.log("Uncaught");
+  console.log(e);
+  throw e;
+})
