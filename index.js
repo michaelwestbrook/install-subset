@@ -85,9 +85,9 @@ cli
     // backup package.json and lockfiles to restore later
     backup('package.json');
     backup('package-lock.json');
-    // if (!options.preserveLockFile) {
+    if (!options.preserveLockFile) {
       backup('yarn.lock');
-    // }
+    }
 
     if (options.clean) {
       shelljs.rm('-rf', path.join(cwd, 'node_modules'));
@@ -113,9 +113,9 @@ cli
     // restore package.json and lockfiles from backup
     restore('package.json');
     restore('package-lock.json');
-    // if (!options.preserveLockFile) {
+    if (!options.preserveLockFile) {
       restore('yarn.lock');
-    // }
+    }
 
     console.log(JSON.stringify(installer, null, 0));
     if (installer.status !== 0) {
