@@ -117,7 +117,7 @@ cli
       restore('yarn.lock');
     }
 
-    console.log(JSON.stringify(installer.output, null, 0));
+    console.log(installer.output.data);
     if (installer.status !== 0) {
       throw 'Error code ' + installer.status;
     }
