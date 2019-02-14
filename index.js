@@ -105,7 +105,7 @@ cli
       //   // installer = spawnSync('npm', ['install'], {
       //   //   stdio: 'inherit'
       //   // });
-      }
+      // }
     } catch (err) {
       console.warn(err);
     }
