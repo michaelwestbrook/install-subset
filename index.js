@@ -84,8 +84,8 @@ cli
 
     // backup package.json and lockfiles to restore later
     backup('package.json');
-    if (!options.preserveLockFile) {
       backup('package-lock.json');
+    if (!options.preserveLockFile) {
       backup('yarn.lock');
     }
 
@@ -112,8 +112,8 @@ cli
 
     // restore package.json and lockfiles from backup
     restore('package.json');
-    if (!options.preserveLockFile) {
       restore('package-lock.json');
+    if (!options.preserveLockFile) {
       restore('yarn.lock');
     }
     const { StringDecoder } = require('string_decoder');
