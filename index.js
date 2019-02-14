@@ -116,8 +116,12 @@ cli
       restore('package-lock.json');
       restore('yarn.lock');
     }
+    // const { StringDecoder } = require('string_decoder');
+    // const decoder = new StringDecoder('utf8');
+    // decoder.write(Buffer.from)
 
-    console.log(installer.output.data);
+
+    console.log(installer);
     if (installer.status !== 0) {
       throw 'Error code ' + installer.status;
     }
