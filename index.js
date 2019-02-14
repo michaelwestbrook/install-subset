@@ -96,11 +96,11 @@ cli
     // write the new temp package.json
     fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(packageJson, null, '  '));
 
-    var installer = {status: 0};
+    var installer;
     // choose which installer to use, then spawn
     try {
       if (!options.npm && shelljs.which('yarn')) {
-        installer = cp.spawnSync('yarn.cmd', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''));
+        installer = cp.spawnSync('yarn.cmd', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : '').concat('--verbose'));
       } else {
         // installer = spawnSync('npm', ['install'], {
         //   stdio: 'inherit'
@@ -148,4 +148,10 @@ process.on("uncaughtException", e => {
   console.log("Uncaught");
   console.log(e);
   throw e;
-})
+});
+
+process.on("unhandledRejection", e => {
+  console.log("Unhandled rejection");
+  console.log(e);
+  throw e;
+});
