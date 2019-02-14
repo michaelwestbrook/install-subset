@@ -121,7 +121,9 @@ cli
     // decoder.write(Buffer.from)
 
 
-    console.log(installer);
+    console.log(installer.stdout);
+    console.log('*****')
+    console.log(installer.stderr);
     if (installer.status !== 0) {
       throw 'Error code ' + installer.status;
     }
