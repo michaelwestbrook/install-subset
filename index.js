@@ -99,12 +99,12 @@ cli
     var installer;
     // choose which installer to use, then spawn
     try {
-      if (!options.npm && shelljs.which('yarn')) {
-        installer = cp.spawnSync('yarn', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''));
-      } else {
-        // installer = spawnSync('npm', ['install'], {
-        //   stdio: 'inherit'
-        // });
+      // if (!options.npm && shelljs.which('yarn')) {
+      //   installer = cp.spawnSync('yarn.cmd', ['install'].concat(options.ignoreScripts ? '--ignore-scripts' : ''));
+      // } else {
+      //   // installer = spawnSync('npm', ['install'], {
+      //   //   stdio: 'inherit'
+      //   // });
       }
     } catch (err) {
       console.warn(err);
@@ -116,15 +116,15 @@ cli
       restore('package-lock.json');
       restore('yarn.lock');
     }
-    const { StringDecoder } = require('string_decoder');
-    const decoder = new StringDecoder('utf8');
+    // const { StringDecoder } = require('string_decoder');
+    // const decoder = new StringDecoder('utf8');
 
-    console.log(decoder.write(installer.stdout));
-    console.log('*****')
-    console.log(decoder.write(installer.stderr));
-    if (installer.status !== 0) {
-      throw 'Error code ' + installer.status;
-    }
+    // console.log(decoder.write(installer.stdout));
+    // console.log('*****')
+    // console.log(decoder.write(installer.stderr));
+    // if (installer.status !== 0) {
+    //   throw 'Error code ' + installer.status;
+    // }
 
     console.log('Installation of subset "' + input_string + '" successful');
   });
